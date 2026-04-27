@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Peso/Volume</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 { text-align: center; color: #333; margin-bottom: 30px; font-size: 24px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 14px; }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus { outline: none; border-color: #667eea; }
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .resultado {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        .resultado.ativo { display: block; }
+        .resultado h2 { color: #333; font-size: 16px; margin-bottom: 10px; }
+        .resultado p { font-size: 32px; font-weight: bold; color: #667eea; }
+        .detalhes {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 13px;
+            color: #666;
+        }
+        .detalhes div { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Peso/Volume</h1>
+        <div class="input-group">
+            <label>Peso Bruto:</label>
+            <input type="number" id="pesoBruto" placeholder="Ex: 100" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>Volume do Produto:</label>
+            <input type="number" id="volumeProduto" placeholder="Ex: 0.5" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>Peso do Produto:</label>
+            <input type="number" id="pesoProduto" placeholder="Ex: 50" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>Quantidade da Nota:</label>
+            <input type="number" id="quantidadeNota" placeholder="Ex: 20">
+        </div>
+        <button id="calcularBtn">Calcular</button>
+        <div class="resultado" id="resultado">
+            <h2>Resultado Final:</h2>
+            <p id="resultadoValor">0.00</p>
+            <div class="detalhes" id="detalhes"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('calcularBtn').addEventListener('click', () => {
+            const pesoBruto = parseFloat(document.getElementById('pesoBruto').value);
+            const volumeProduto = parseFloat(document.getElementById('volumeProduto').value);
+            const pesoProduto = parseFloat(document.getElementById('pesoProduto').value);
+            const quantidadeNota = parseFloat(document.getElementById('quantidadeNota').value);
+
+            if (isNaN(pesoBruto) || isNaN(volumeProduto) || isNaN(pesoProduto) || isNaN(quantidadeNota) || volumeProduto === 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            // 1º Passo: peso bruto / volume
+            const passo1 = pesoBruto / volumeProduto;
+            // 2º Passo: peso do produto * quantidade
+            const passo2 = pesoProduto * quantidadeNota;
+            // 3º Passo: resultado do 2º passo - peso bruto
+            const resultadoFinal = passo2 - pesoBruto;
+
+            document.getElementById('resultado').classList.add('ativo');
+            document.getElementById('resultadoValor').textContent = resultadoFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            
+            document.getElementById('detalhes').innerHTML = `
+                <div><strong>1º Passo (Peso Bruto ÷ Volume):</strong> ${passo1.toFixed(4)}</div>
+                <div><strong>2º Passo (Peso Prod. × Qtd):</strong> ${passo2.toFixed(2)}</div>
+                <div><strong>3º Passo (Resultado Final):</strong> ${resultadoFinal.toFixed(2)}</div>
+            `;
+        });
+    </script>
+</body>
+</html>
